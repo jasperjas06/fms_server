@@ -1,8 +1,4 @@
-
 import jwt from 'jsonwebtoken'
-
-
-
 function auth(req,res,next){
     const token=req.header('auth')
     if(!token) return res.status(401).send('token Access denied')
@@ -18,6 +14,17 @@ function auth(req,res,next){
 }
 
 export default auth
+
+export const admin=(req,res,next)=>{
+    if(!req.user.isAdmin) return res.status(403).send('Access Denide ')
+    next()
+}
+
+export const cashier=(req,res,next)=>{
+    if(!req.user.isCashier) return res.status(403).send('Access Denide ')
+    next()
+}
+
 
 
 

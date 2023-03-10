@@ -16,10 +16,19 @@ const Staff=mongoose.model('Staff',new mongoose.Schema({
         type: String,
         required: true
     },
+    department:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Department',
+        required:true
+    },
     isStaff:{
         type: Boolean,
         default: true
-      }
+    },
+    isCashier:{
+        type:Boolean,
+        default:true
+    }
 
 }));
 
@@ -28,7 +37,7 @@ const validateStaff = (value) => {
       name:Joi.string(),
       email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
       password: Joi.string().required().min(3),
-    
+      department:Joi.string().required()
     });
     const result = schema.validate(value)
   
