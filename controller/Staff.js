@@ -19,7 +19,9 @@ const register = async(req,res) =>{
         let user=new Staff({
             name:req.body.name,
             email:req.body.email,
-            password:hash
+            password:hash,
+            department:req.body.department,
+            isStaff:true
         })
         const result=await user.save()
         res.send(result)
@@ -44,8 +46,9 @@ const Login = async(req, res) => {
        }
        const id=userData._id
        const staff=userData.isStaff
+       const cashier=userData.isCashier
     
-      const userToken =await jwt.sign({id:id,isStaff:staff},process.env.JWTKEY);
+      const userToken =await jwt.sign({id:id,isStaff:staff,isCashier:cashier},process.env.JWTKEY);
 
       res.header('auth',userToken).send(userToken)
     } catch (error) {

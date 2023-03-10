@@ -5,7 +5,9 @@ import Joi from 'joi'
 
 const Fine=mongoose.model('Fine',new mongoose.Schema({
    RegNo:{
-    type: String,
+    type:mongoose.Schema.Types.ObjectId,
+        ref:'Student',
+        required:true
    },
    date:{
     type:Date,

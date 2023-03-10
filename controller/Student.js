@@ -2,7 +2,8 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import Student,{validateStudent} from '../schema/Student.js'
 
-const cashier_reg = async(req,res)=>{
+
+const Register=async(req,res)=>{
     const email = req.body.email
     const Name =  req.body.name;
     let name = Name
@@ -16,47 +17,14 @@ const cashier_reg = async(req,res)=>{
         res.status(400).send("email is already takken");
     }else{
         try {
-            console.log(req.body.name);
+            let reg=req.body.RegNo
+            reg.toLocaleUpperCase()
             let hash=await bcrypt.hash(req.body.password,10);
 
             let user=new Student({  
                 name:name,
-                RegNo:req.body.RegNo,
-                // Course:req.body.Course,
-                Dept:req.body.Dept,
-                // Section: req.body.Section,
-                email:req.body.email,
-                password:hash,
-                isCashier:true
-            });
-            let result=await user.save();
-            res.status(200).send(result)
-        } catch (error) {
-            res.status(400).send(error.message)
-        }
-    }
-}
-const Register=async(req,res)=>{
-    const email = req.body.email
-    const {error}=validateStudent(req.body)
-    if (error){
-        return res.status(400).send(error.details[0].message);
-    }
-
-    const exuser=await Student.findOne({email:email});
-    if (exuser) {
-        res.status(400).send("email is already takken");
-    }else{
-        try {
-            console.log(req.body.name);
-            let hash=await bcrypt.hash(req.body.password,10);
-
-            let user=new Student({  
-                name:req.body.name,
-                RegNo:req.body.RegNo,
-                // Course:req.body.Course,
-                Dept:req.body.Dept,
-                // Section: req.body.Section,
+                RegNo:reg,
+                department:req.body.department,
                 email:req.body.email,
                 password:hash,
             });
@@ -81,7 +49,8 @@ const Login=async(req,res) => {
        }
        const id=userData._id
        const RegNo=userData.RegNo
-      const userToken =await jwt.sign({id:id,RegNo:RegNo},process.env.JWTKEY);
+       const cashier=userData.isCashier
+      const userToken =jwt.sign({ id: id, RegNo: RegNo, isCashier: cashier }, process.env.JWTKEY);
 
       res.header('auth',userToken).send(userToken)
     } catch (error) {
@@ -134,4 +103,4 @@ const profileView=async(req, res) => {
     let result=await Student.findById({_id:req.user.id})
     res.status(200).send(result)
 }
-export default {Register,Login,Update,getAll,ChangePassword,profileView,cashier_reg}
+export default {Register,Login,Update,getAll,ChangePassword,profileView}

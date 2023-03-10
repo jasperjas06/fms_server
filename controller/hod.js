@@ -21,7 +21,7 @@ const register = async(req,res) =>{
             name:req.body.name,
             email:req.body.email,
             password:hash,
-            dept:req.body.dept
+            department:req.body.department
         })
         const result=await user.save()
         res.send(result)

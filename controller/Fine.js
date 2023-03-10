@@ -21,7 +21,7 @@ const AddFine = async(req,res) =>{
 
  //Hod works
  const AddAll = async(req,res) =>{
-    
+     
     try { 
         let arr=[];
         const stu=await Student.find({},{RegNo:1})
@@ -88,20 +88,6 @@ const result=tot.reduce((current,next)=>current+next,initval)
 //  res.send(`${JSON.stringify(total)},Total:${result}`)
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
  const Update=async (req, res) => {
     try {
         const date=new Date()

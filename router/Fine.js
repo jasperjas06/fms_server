@@ -1,12 +1,12 @@
 import express from "express";
 import Fine from '../controller/Fine.js';
-import auth from '../auth/auth.js'
+import auth, { cashier } from '../auth/auth.js'
 import Staff from '../auth/staff.js'
 import authHod from "../auth/hod.js";
 
 const router=express.Router()
 
-router.post('/fine/add',Fine.AddFine)
+router.post('/fine/add',[auth,cashier],Fine.AddFine)
 router.post('/fine/all',Fine.AddAll)
 router.post('/fine/update',Fine.Update)
 router.get('/fine/get',Fine.getFine)

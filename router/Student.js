@@ -4,7 +4,7 @@ import auth from '../auth/auth.js'
 const router=express.Router()
 
 router.post('/student/register',Student.Register)
-router.post('/cashier/register',Student.cashier_reg)
+// router.post('/cashier/register',Student.cashier_reg)
 router.post('/student/login',Student.Login)
 router.post('/student/update',auth,Student.Update)
 router.get('/student/get',auth,Student.getAll)

@@ -7,6 +7,7 @@ import Student from './router/Student.js'
 import Fine from './router/Fine.js'
 import Staff from './router/Staff.js'
 import Hod from './router/hod.js'
+import Admin from './router/Admin.js'
 
 dotenv.config()
 const app = express();
@@ -16,6 +17,7 @@ app.use(bodyParser.json());
 
 config()
 
+app.use('/api',Admin)
 app.use('/api',Hod)
 app.use('/api',Student)
 app.use('/api',Fine)

@@ -15,14 +15,6 @@ const Student=mongoose.model('Student',new mongoose.Schema({
         uppercase: true,
         unique: true
     },
-    // Course:{
-    //     type: String,
-    //     required: true
-    // },
-    Dept:{
-        type: String,
-        required: true
-    },
     Section:{
         type: String,
         default:"A"
@@ -36,6 +28,11 @@ const Student=mongoose.model('Student',new mongoose.Schema({
         type: String,
         required: true
     },
+    department:{
+      type:mongoose.Schema.Types.ObjectId,
+      ref:'Department',
+      required:true
+  },
     date: {
         type: Date,
         default: Date.now
@@ -50,10 +47,10 @@ const validateStudent= (value) => {
     const schema = Joi.object({
       name: Joi.string().min(3),
       RegNo:Joi.string(),
-      Course:Joi.string().min(3),
+      // Course:Joi.string().min(3),
     //   batch:Joi.number().min(4),
     Section:Joi.string(),
-      Dept:Joi.string(),
+    department:Joi.string(),
       email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
       password: Joi.string().required().min(4),
 
