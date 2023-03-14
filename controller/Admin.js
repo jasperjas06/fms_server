@@ -55,7 +55,7 @@ const Login = async(req, res) => {
                const id=exAdmin._id
                const admin=exAdmin.isAdmin
               const userToken =jwt.sign({ id: id, isAdmin: admin }, process.env.JWTKEY);
-              res.header('auth',userToken).send({message:"Login Successfull",token:userToken})
+              res.header('auth',userToken).send(userToken)
         } else if(hod){
             let validpassword =await bcrypt.compare(req.body.password,hod.password)
             if(!validpassword) {
@@ -64,7 +64,7 @@ const Login = async(req, res) => {
                const id=hod._id
                const hod1=hod.isHod
               const userToken =jwt.sign({ id: id, isHod: hod1 }, process.env.JWTKEY);
-              res.header('auth',userToken).send({message:"Login Successfull",token:userToken})
+              res.header('auth',userToken).send(userToken)
         } else if(staff){
             let validpassword =await bcrypt.compare(req.body.password,staff.password)
                 if(!validpassword) {
@@ -74,7 +74,7 @@ const Login = async(req, res) => {
                    const staff1=staff.isStaff
                    const cashier= staff.isCashier
                   const userToken =jwt.sign({ id: id, isStaff: staff1, isCashier:cashier }, process.env.JWTKEY);
-                  res.header('auth',userToken).send({message:"Login Successfull",token:userToken})
+                  res.header('auth',userToken).send(userToken)
         } else if(student){
             let validpassword =await bcrypt.compare(req.body.password,student.password)
             if(!validpassword) {
@@ -84,7 +84,7 @@ const Login = async(req, res) => {
                const RegNo=student.RegNo
                const cashier= student.isCashier
               const userToken =jwt.sign({ id: id, regNo: RegNo, isCashier:cashier }, process.env.JWTKEY);
-              res.header('auth',userToken).send({message:"Login Successfull",token:userToken})
+              res.header('auth',userToken).send(userToken)
         }else{ return res.status(400).send("email not found") }
        
     } catch (error) {
