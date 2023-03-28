@@ -29,9 +29,9 @@ const Register=async(req,res)=>{
                 password:hash,
             });
             let result=await user.save();
-            res.status(200).send(result)
+            res.status(200).send({message:"Student Registered Successfully"})
         } catch (error) {
-            res.status(400).send(error.message)
+            res.status(400).send({message:error.message})
         }
     }
 
