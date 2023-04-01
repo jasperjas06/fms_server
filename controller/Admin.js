@@ -116,4 +116,16 @@ const createDep = async(req,res) =>{
     res.status(400).send(error.message)
    }
 }
-export default {register,Login, createDep}
+
+const getDep= async(req,res)=>{
+    let  data= await Department.find()
+    try {
+        if(!data){
+            return res.status(400).send(error.details[0].message); 
+        }else
+        res.send({message:"Data",data:data})
+    } catch (error) {
+        console.log(error);
+    }
+}
+export default {register,Login, createDep, getDep}

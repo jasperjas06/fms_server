@@ -14,7 +14,7 @@ const Register=async(req,res)=>{
 
     const exuser=await Student.findOne({email:email});
     if (exuser) {
-        res.status(400).send("email is already takken");
+        res.status(400).send({message:"This email is already registered"});
     }else{
         try {
             let reg=req.body.RegNo
@@ -29,9 +29,9 @@ const Register=async(req,res)=>{
                 password:hash,
             });
             let result=await user.save();
-            res.status(200).send(result)
+            res.status(200).send({message:"Congratulations, your account has been successfully created"})
         } catch (error) {
-            res.status(400).send(error.message)
+            res.status(400).send({message:error.message})
         }
     }
 
