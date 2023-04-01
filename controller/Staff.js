@@ -6,29 +6,30 @@ import jwt from 'jsonwebtoken'
 const register = async(req,res) =>{
     const email = req.body.email
     const {error}=validateStaff(req.body)
-   try {
+    const password='staff@fms'
+    try {
+    //    console.log(password);
     if(error) return res.status(400).send(error.details[0].message);
- 
     const exUser=await Staff.findOne({email: email})
     if(exUser){
         res.send("email is already taken")
     }
     else{
-        let hash =await bcrypt.hash(req.body.password,10)
-       
+        // console.log(password);
+        let hashpassword =await bcrypt.hash('staff@fms',10)
         let user=new Staff({
             name:req.body.name,
             email:req.body.email,
-            password:hash,
+            password:hashpassword,
             department:req.body.department,
             isStaff:true
         })
         const result=await user.save()
-        res.send(result)
+        res.send("Staff created")
 
     }
    } catch (error) {
-    res.status(400).send(error.message)
+    res.status(400).send(message.error)
    }
 }
 

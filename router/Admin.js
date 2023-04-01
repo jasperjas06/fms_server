@@ -9,12 +9,13 @@ const router=express.Router()
 
 
 router.post('/admin/register',Admin.register)
-
 router.post('/admin/department',[auth,admin],Admin.createDep)
+router.post('/admin/Fine',[auth,admin],Admin.crtFine)
 
 // Common routes
 router.post('/login',Admin.Login)
 router.get('/getDep',Admin.getDep)
+router.get('/getFine',Admin.getFine)
 
 
 

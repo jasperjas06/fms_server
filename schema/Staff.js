@@ -36,7 +36,7 @@ const validateStaff = (value) => {
     const schema = Joi.object({
       name:Joi.string(),
       email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
-      password: Joi.string().required().min(3),
+      password: Joi.string().min(3),
       department:Joi.string().required()
     });
     const result = schema.validate(value)

@@ -103,4 +103,13 @@ const profileView=async(req, res) => {
     let result=await Student.findById({_id:req.user.id})
     res.status(200).send(result)
 }
-export default {Register,Login,Update,getAll,ChangePassword,profileView}
+
+const getStudents=async(req, res)=>{
+    try {
+     let result=await Student.find({department:req.body.department});
+     res.status(200).send(result)
+    } catch (error) {
+     console.log(error.message);
+    }
+ }
+export default {Register,Login,Update,getAll,ChangePassword,profileView,getStudents}

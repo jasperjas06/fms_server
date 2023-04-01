@@ -10,6 +10,7 @@ router.post('/student/update',auth,Student.Update)
 router.get('/student/get',auth,Student.getAll)
 router.post('/student/changePassword',auth,Student.ChangePassword)
 router.get('/student/profile',auth,Student.profileView)
+router.post('/student/dep',auth,Student.getStudents)
 
 
 

@@ -17,6 +17,10 @@ app.use(bodyParser.json());
 
 config()
 
+app.get('/',(req,res)=>{
+    res.send('working')
+})
+
 app.use('/api',Admin)
 app.use('/api',Hod)
 app.use('/api',Student)

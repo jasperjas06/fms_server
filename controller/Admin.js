@@ -7,6 +7,7 @@ import Department, { validateDepartment } from '../schema/Department.js'
 import Hod from '../schema/Hod.js'
 import Staff from '../schema/Staff.js'
 import Student from '../schema/Student.js'
+import FineDetaile, { validateFineDetailes } from '../schema/FIneDetailes.js'
 
 
 const register = async(req,res) =>{
@@ -128,4 +129,42 @@ const getDep= async(req,res)=>{
         console.log(error);
     }
 }
-export default {register,Login, createDep, getDep}
+
+const crtFine = async(req,res)=>{
+    let fine = req.body.fine;
+    const {error}=validateFineDetailes(req.body)
+    try {
+        if(error) return res.status(400).send(error.details[0].message);
+ 
+    const exFine=await FineDetaile.findOne({fine: fine})
+    if(exFine){
+        res.send("Fine already exits")
+    }
+    else{
+    let newFine= new FineDetaile({
+        fine:fine,
+        amount:req.body.amount
+    })
+    let result = newFine.save()
+    console.log(result);
+    res.send({message:"Fine Created"})
+}
+    } catch (error) {
+     console.log(error);   
+    }
+
+}
+
+const getFine= async(req,res)=>{
+    let  data= await FineDetaile.find()
+    try {
+        if(!data){
+            return res.status(400).send(error.details[0].message); 
+        }else
+        res.send({message:"Data",data:data})
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export default {register,Login, createDep, getDep,crtFine,getFine}

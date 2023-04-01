@@ -9,24 +9,29 @@ const Fine=mongoose.model('Fine',new mongoose.Schema({
         ref:'Student',
         required:true
    },
-   date:{
-    type:Date,
-    default:Date.now()
+   department:{
+    type:mongoose.Schema.Types.ObjectId,
+        ref:'Department',
+        required:true
    },
    status:{
-    type:String,
-    default:"Not paid",
-    enum: ['Not paid', 'paid']
-   },
-   reason:{
-    type:String,
-    required:true
-   },
-   Datepayment:{
-        type:String,
-        default:null
-   },
-   amount:{
+     type:String,
+     default:"Not paid",
+     enum: ['Not paid', 'paid']
+    },
+    reason:{
+      type:String,
+      required:true
+    },
+    date:{
+     type:Date,
+     default:Date.now()
+    },
+    Dateofpayment:{
+      type:String,
+      default:null
+    },
+    amount:{
     type:Number,
     default:0
    }

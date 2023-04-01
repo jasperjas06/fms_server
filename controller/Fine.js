@@ -4,17 +4,17 @@ const AddFine = async(req,res) =>{
     // console.log(req.body);
     try {
          let user=new Fine({
-             RegNo:req.body.RegNo,
-             status:req.body.status, 
+             RegNo:req.body.RegNo, 
              amount:req.body.amount,
-             reason:req.body.reason 
+             reason:req.body.reason,
+             department:req.body.department
          })
          const result=await user.save()
-         res.send(result)
+         res.send({message:"fine added"})
  
      
     } catch (error) {
-     res.status(400).send(error.message)
+     res.status(400).send({message:error.message})
     }
  }
 
