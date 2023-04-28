@@ -12,7 +12,8 @@ const register = async(req,res) =>{
     if(error) return res.status(400).send(error.details[0].message);
     const exUser=await Staff.findOne({email: email})
     if(exUser){
-        res.send("email is already taken")
+        // res.send("email is already taken")
+        res.status(400).send({message:"email already in use"})
     }
     else{
         // console.log(password);
@@ -25,7 +26,8 @@ const register = async(req,res) =>{
             isStaff:true
         })
         const result=await user.save()
-        res.send("Staff created")
+        // res.send("Staff created")
+        res.status(200).send({message:"Staff created"})
 
     }
    } catch (error) {
@@ -37,7 +39,7 @@ const register = async(req,res) =>{
 const Login = async(req, res) => {
     try {
         // console.log( req.body.email);
-        let userData=await Staff.findOne({email: req.body.email});
+        let userData=await Staff.findOne({email: req.body.email}).populate('department');
         if (!userData) {
             return res.status(400).send("email not found")
         }
@@ -45,11 +47,13 @@ const Login = async(req, res) => {
        if(!validpassword) {
         return res.status(400).send("not a valid password")
        }
+       console.log(userData,'log');
        const id=userData._id
        const staff=userData.isStaff
        const cashier=userData.isCashier
+       const dept=userData.department?._id
     
-      const userToken =await jwt.sign({id:id,isStaff:staff,isCashier:cashier},process.env.JWTKEY);
+      const userToken =await jwt.sign({id:id,isStaff:staff,isCashier:cashier,department:dept},process.env.JWTKEY);
 
       res.header('auth',userToken).send(userToken)
     } catch (error) {

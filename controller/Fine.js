@@ -10,11 +10,9 @@ const AddFine = async(req,res) =>{
              department:req.body.department
          })
          const result=await user.save()
-         res.send({message:"fine added"})
- 
-     
+         res.status(200).send({message:"fine added"})
     } catch (error) {
-     res.status(400).send({message:error.message})
+     res.status(400).send({message:error})
     }
  }
 
@@ -92,7 +90,7 @@ const result=tot.reduce((current,next)=>current+next,initval)
     try {
         const date=new Date()
  
-        let update=await Fine.findOneAndUpdate({_id:req.body.id},{$set:{status:req.body.status,Datepayment:date,amount:req.body.amount}},{new:true})
+        let update=await Fine.findOneAndUpdate({_id:req.body.id},{$set:{status:req.body.status,Dateofpayment:date}},{new:true})
 
         res.send(update)
 
@@ -111,14 +109,25 @@ const getFine=async(req, res)=>{
 }
 const fidparam=async(req, res) =>{
     // console.log(req.params.id);
-    let id=req.params.id
+    let id=req.body.id
+    let arr=[]
    try {
-    let result=await Fine.findOne({_id:id})
-    if(result){
-        res.status(200).send(result)
-    }else{
-        res.send({result:"No user found"})
-    }
+    let result=await Fine.find({RegNo:id}).populate('RegNo')
+    let data = result?.map((item,index)=>{
+        if(item.status == 'Not paid'){
+            arr.push({
+                name:item.RegNo?.name,
+                reason:item.reason,
+                amount:item.amount,
+                id:item._id
+            })
+            return arr
+        }
+        else{
+            return null
+        }
+    })
+    res.status(200).send(arr)
    } catch (error) {
     res.send(error.message);
    }
@@ -145,6 +154,35 @@ const getFie=async(req, res)=>{
      
     }
  }
+const departNotPaid=async(req, res)=>{
+    try {
+        let arr=[]
+     let result=await Fine.find({department:req.body.id}).populate('RegNo');
+     let data = result?.map((item,index)=>{
+        if(item.status == 'Not paid'){
+            arr.push({
+                name:item.RegNo?.name,
+                reason:item.reason,
+                amount:item.amount,
+                id:item._id
+            })
+            return arr
+        }
+        else{
+            return null
+        }
+     })
+    //  console.log(arr);
+     res.status(200).send(arr)
+    // let result=await Fine.aggregate([
+    //     {$match:{department:req.body.id}},
+    //     {$group:{_id:{name:"$RegNo.name", reason:"$reason", amount:"$amount", id:"$_id"}}}
+    // ]);
+    // console.log(result);
+    } catch (error) {
+     console.log(error);
+    }
+ }
 
  const paid=async(req,res)=> {
     let data=await Fine.aggregate([
@@ -156,23 +194,74 @@ const getFie=async(req, res)=>{
     data.map((item,i)=>{
         total=item.total
     })
-    // console.log(total);
-    res.status(200).send(data)
+    console.log(total);
+    res.status(200).send({data:total})
  }
- const notpaid=async(req,res)=> {
+ const overallpending=async(req,res)=> {
     let data=await Fine.aggregate([
         {$group:{_id:{status:"$status"},total:{$sum:"$amount"}}}
         , {$match:{"_id.status":"Not paid"}}
     ])
     // console.log(data);
-//    let total=0
-//     data.map((item,i)=>{
-//         total=item.total
-//     })
-//     console.log(total);
-    res.status(200).send(data)
+    let total=0
+    data.map((item,i)=>{
+        total=item.total
+    })
+    console.log(total);
+    res.status(200).send({data:total})
  }
-//  paid()
+ const notpaid=async(req,res)=> {
+    let id = req.body.id;
+    try {
+        let data=await Fine.find({RegNo:id})
+        let arr=[]
+        data.filter((item,index)=>{
+            if(item.status === 'Not paid'){
+                arr.push(item)
+            }
+        })
+        let sum=0
+        for( let i=0; i< arr.length; i++){
+            sum = sum +arr[i].amount
+        }
+        res.status(200).send({message:"Pending amount to pay",amount:sum})
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+ }
+
+ const deptPending=async(req,res)=> {
+    let id = req.body.id;
+    try {
+        let data=await Fine.find({department:id})
+        let arr=[]
+        data.filter((item,index)=>{
+            if(item.status === 'Not paid'){
+                arr.push(item)
+            }
+        })
+        let sum=0
+        for( let i=0; i< arr.length; i++){
+            sum = sum +arr[i].amount;
+        }
+        res.status(200).send({message:"Pending amount to pay",amount:sum})
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+ }
+
+ const allNotpaid=async(req,res)=>{
+    try {
+        let result=await Fine.find({status:'Not paid'}).populate('RegNo');
+        res.status(200).send(result)
+
+        
+       } catch (error) {
+        res.status(400).send(error.message)
+       }
+ }
 
 
 const search=async (req,res)=>{
@@ -197,4 +286,4 @@ const search=async (req,res)=>{
     }
 }
 
- export default {AddFine,updateParams,Update,getFine,fidparam,getFie,paid,notpaid,search,AddAll,payStatus}
+ export default {AddFine,updateParams,Update,getFine,fidparam,getFie,paid,notpaid,search,AddAll,payStatus,deptPending,allNotpaid,overallpending,departNotPaid}

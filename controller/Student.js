@@ -65,15 +65,15 @@ const Update=async (req,res)=>{
     // console.log(data);
     try {
         if(!req.body.RegNo && !req.body.email){
-            let update=await Student.findOneAndUpdate({_id:req.user.id},{$set:data},{new:true})
+            let update=await Student.findByIdAndUpdate({_id:req.body.id},{$set:data},{new:true})
             if(update){
                 try {
-                    res.status(200).send(update)
+                    res.status(200).send("updated")
                 } catch (error) {
                     res.status(400).send(error.message)
                 }
             }else{
-                console.log(req.user.id);
+                // console.log(req.user.id);
                 res.send("student not found")
             }
         }else{

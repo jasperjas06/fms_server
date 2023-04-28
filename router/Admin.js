@@ -16,6 +16,7 @@ router.post('/admin/Fine',[auth,admin],Admin.crtFine)
 router.post('/login',Admin.Login)
 router.get('/getDep',Admin.getDep)
 router.get('/getFine',Admin.getFine)
+router.post('/profile',Admin.getprofile)
 
 
 
